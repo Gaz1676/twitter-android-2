@@ -9,18 +9,25 @@ import android.widget.TextView;
 
 import app.mytweetapp.R;
 import app.mytweetapp.helpers.ValidateHelper;
+import app.mytweetapp.main.MyTweetApp;
+import app.mytweetapp.models.User;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static app.mytweetapp.helpers.MediaPlayerHelper.invalidInput;
-import static app.mytweetapp.helpers.MediaPlayerHelper.validInput;
 import static app.mytweetapp.helpers.ToastHelper.createToastMessage;
 
-public class Signup extends AppCompatActivity {
+public class SignupActivity extends AppCompatActivity implements Callback<User> {
 
-    // called to do initial creation of the activity
+    private MyTweetApp app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        app = (MyTweetApp) getApplication();
+
         Button signup_button = (Button) findViewById(R.id.signupButton);
         signup_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,7 +38,6 @@ public class Signup extends AppCompatActivity {
     }
 
 
-    // details of new user created on sign up and saved in MyTweetApp Object
     public void signup(View view) {
         TextView firstName = (TextView) findViewById(R.id.signupFirstName);
         TextView lastName = (TextView) findViewById(R.id.signupLastName);
@@ -43,16 +49,13 @@ public class Signup extends AppCompatActivity {
             invalidInput(this);
             firstName.setError("Please input first name");
 
-
         } else if (!ValidateHelper.isValidName(firstName.getText().toString())) {
             invalidInput(this);
             firstName.setError("Only use letters");
 
-
         } else if (!ValidateHelper.isValidInput(lastName.getText().toString())) {
             invalidInput(this);
             lastName.setError("Please input last name");
-
 
         } else if (!ValidateHelper.isValidName(lastName.getText().toString())) {
             invalidInput(this);
@@ -63,17 +66,35 @@ public class Signup extends AppCompatActivity {
             invalidInput(this);
             email.setError("Please enter a valid email");
 
-
         } else if (!ValidateHelper.isValidInput(password.getText().toString())) {
             invalidInput(this);
             password.setError("Please enter password");
 
-
         } else {
-            startActivity(new Intent(this, Login.class));
+            User user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString(), password.getText().toString());
 
-            validInput(this);
-            createToastMessage(this, "Welcome to MyTweetApp!");
+            MyTweetApp app = (MyTweetApp) getApplication();
+
+            Call<User> call = app.tweetService.createUser(user);
+            call.enqueue(this);
         }
+    }
+
+
+    @Override
+    public void onResponse(Call<User> call, Response<User> response) {
+        User user = response.body();
+        app.users.add(user);
+        app.currentUser = user;
+        startActivity(new Intent(this, TweetActivity.class));
+        createToastMessage(this, "Fancy making a tweet " + user.firstName + " ?");
+    }
+
+
+    @Override
+    public void onFailure(Call<User> call, Throwable t) {
+        app.tweetServiceAvailable = false;
+        createToastMessage(this, "You are a terrible programmer - go home!!!!");
+        startActivity(new Intent(this, WelcomeActivity.class));
     }
 }
