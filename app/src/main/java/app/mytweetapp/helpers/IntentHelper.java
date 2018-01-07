@@ -35,8 +35,7 @@ public class IntentHelper {
         parent.startActivity(intent);
     }
 
-    public static void startActivityWithDataForResult (Activity parent, Class classname, String extraID, Serializable extraData, int idForResult)
-    {
+    public static void startActivityWithDataForResult(Activity parent, Class classname, String extraID, Serializable extraData, int idForResult) {
         Intent intent = new Intent(parent, classname);
         intent.putExtra(extraID, extraData);
         parent.startActivityForResult(intent, idForResult);
@@ -49,8 +48,7 @@ public class IntentHelper {
         NavUtils.navigateUpTo(parent, upIntent);
     }
 
-    public static void selectContact(Activity parent, int id)
-    {
+    public static void selectContact(Activity parent, int id) {
         Intent selectContactIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         parent.startActivityForResult(selectContactIntent, id);
     }

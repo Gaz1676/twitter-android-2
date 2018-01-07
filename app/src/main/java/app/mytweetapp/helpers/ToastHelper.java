@@ -31,7 +31,7 @@ public class ToastHelper {
     }
 
 
-    // pop up dialogue box when deleting tweets
+    // pop up dialogue box when deleting tweetActivities
     // gives user the option to delete tweet or cancel request
     public static void dialogBox(Context context, DialogInterface.OnClickListener noListener,
                                  DialogInterface.OnClickListener yesListener) {
