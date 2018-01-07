@@ -36,6 +36,11 @@ dependencies {
     /* https://github.com/hdodenhof/CircleImageView */
     compile 'de.hdodenhof:circleimageview:2.1.0' // added library for circle icon
 
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+
 
 }
+
 
