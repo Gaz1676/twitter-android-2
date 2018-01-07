@@ -34,6 +34,13 @@ public class MediaPlayerHelper {
     }
 
 
+    // sound for menu pressed
+    public static void menuPressed(Context context) {
+        mp = MediaPlayer.create(context, R.raw.swish);
+        mp.start();
+    }
+
+
     // sound for valid selection or input
     public static void validInput(Context context) {
         mp = MediaPlayer.create(context, R.raw.valid);

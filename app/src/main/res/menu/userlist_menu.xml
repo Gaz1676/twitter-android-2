@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context="app.mytweetapp.activities.UserListActivity" >
 
-    <item android:id="@+id/tweet"
-        android:title="@string/tweet"
-        android:orderInCategory="100" />
+<item
+    android:id="@+id/menu"
+    android:icon="@drawable/menu_icon"
+    android:orderInCategory="100"
+    android:title="@string/menu"
+    app:showAsAction="ifRoom">
+    <menu>
+        <item
+            android:id="@+id/tweet"
+            android:icon="@drawable/tweet_icon"
+            android:orderInCategory="100"
+            android:title="@string/tweet"/>
 
-    <item
-        android:id="@+id/timeline"
-        android:orderInCategory="100"
-        android:title="@string/timeline" />
+        <item
+            android:id="@+id/timeline"
+            android:orderInCategory="100"
+            android:icon="@drawable/timeline_icon"
+            android:title="@string/timeline" />
 
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/settings_icon"
+            android:orderInCategory="100"
+            android:title="@string/settings" />
 
-    <item android:id="@+id/settings"
-        android:title="@string/settings"
-        android:orderInCategory="100"/>
-
-    <item
-        android:id="@+id/menuLogout"
-        android:orderInCategory="100"
-        android:title="@string/logout"/>
-
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/logout_icon"
+            android:orderInCategory="100"
+            android:title="@string/logout"
+            app:showAsAction="ifRoom" />
+    </menu>
+</item>
 </menu>

@@ -24,6 +24,12 @@
                 android:title="@string/settings" />
 
             <item
+                android:id="@+id/usersList"
+                android:icon="@drawable/users_icon"
+                android:orderInCategory="100"
+                android:title="@string/users" />
+
+            <item
                 android:id="@+id/logout"
                 android:icon="@drawable/logout_icon"
                 android:orderInCategory="100"

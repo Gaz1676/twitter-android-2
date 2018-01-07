@@ -1,5 +1,6 @@
 package app.mytweetapp.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,13 +41,10 @@ public class TweetActivity extends AppCompatActivity implements View.OnClickList
     private Button tweetButton;
     private Button contactButton;
     private Button emailButton;
-    //private Intent data;
-    //private Tweet tweet;
     private String emailAddress = "";
     private MyTweetApp app;
 
 
-    // called to do initial creation of the fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,15 +58,10 @@ public class TweetActivity extends AppCompatActivity implements View.OnClickList
         contactButton = (Button) findViewById(R.id.contactButton);
         emailButton = (Button) findViewById(R.id.emailButton);
 
-       /* // http://www.technotalkative.com/android-get-current-date-and-time-in-different-format/
-        Calendar cal = Calendar.getInstance();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss aa");
-        String currentDateTimeString = dateFormat.format(cal.getTime());
-*/
+        // reference at end of file
         String currentDateTimeString = getFormatedDate();
         date.setText(Html.fromHtml(currentDateTimeString));
 
-        date.setText(currentDateTimeString);
 
         contactButton.setOnClickListener(this);
         emailButton.setOnClickListener(this);
@@ -78,9 +70,7 @@ public class TweetActivity extends AppCompatActivity implements View.OnClickList
 
 
     public void tweetPressed(View view) {
-        Toast.makeText(app, "Creating tweet", Toast.LENGTH_SHORT).show();
         String text = message.getText().toString();
-
 
         if (text.length() > 0) {
             Tweet tweet = new Tweet(text, date.getText().toString());
@@ -95,10 +85,10 @@ public class TweetActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         getMenuInflater().inflate(R.menu.tweetpage, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -118,6 +108,7 @@ public class TweetActivity extends AppCompatActivity implements View.OnClickList
         }
         return true;
     }
+
 
     @Override
     public void onClick(View view) {
@@ -149,20 +140,21 @@ public class TweetActivity extends AppCompatActivity implements View.OnClickList
         createToastMessage(this, "Tweet has been sent");
     }
 
+
     @Override
     public void onFailure(Call<Tweet> call, Throwable t) {
         createToastMessage(this, "Error creating Tweet");
     }
 
 
-    private String getFormatedDate(){
+    // https://stackoverflow.com/questions/26337836/how-to-format-the-current-date-with-suffix-to-superscript
+    private String getFormatedDate() {
         String dayNumberSuffix = getDayNumberSuffix(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        //SimpleDateFormat dateFormat = new SimpleDateFormat(" d'" + dayNumberSuffix + "' MMM yyyy");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d'" + dayNumberSuffix + "' yyyy, HH:mm:ss aa");
-
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d'" + dayNumberSuffix + "' yyyy, HH:mm:ss aa");
         return dateFormat.format(Calendar.getInstance().getTime());
     }
 
+    // https://stackoverflow.com/questions/26337836/how-to-format-the-current-date-with-suffix-to-superscript
     private String getDayNumberSuffix(int day) {
         if (day >= 11 && day <= 13) {
             return "<sup>th</sup>";

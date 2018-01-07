@@ -9,10 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +25,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static app.mytweetapp.helpers.IntentHelper.navigateUp;
-import static app.mytweetapp.helpers.ToastHelper.createToastMessage;
+import static app.mytweetapp.helpers.MediaPlayerHelper.menuPressed;
 
 
-public class UserListActivity extends AppCompatActivity implements Callback<List<User>>, AdapterView.OnItemClickListener {
+public class UserListActivity extends AppCompatActivity implements Callback<List<User>> {
 
+    private ListView listView;
     private MyTweetApp app;
     private UserAdapter adapter;
-    public List<User> users;
-    private ListView listView;
-    public TextView follow;
+    private Button follow;
 
 
     @Override
@@ -44,10 +43,9 @@ public class UserListActivity extends AppCompatActivity implements Callback<List
 
         app = (MyTweetApp) getApplication();
 
-        listView = (ListView) findViewById(R.id.userlist);
-        adapter = new UserAdapter(this, users);
+        listView = (ListView) findViewById(R.id.usersList);
+        adapter = new UserAdapter(this, app.users);
         listView.setAdapter(adapter);
-
 
         Call<List<User>> call = app.tweetService.getAllUsers();
         call.enqueue(this);
@@ -57,17 +55,23 @@ public class UserListActivity extends AppCompatActivity implements Callback<List
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.userlist_menu, menu);
+        menuPressed(this);
         return true;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Call<List<User>> call =  app.tweetService.getAllUsers();
+        call.enqueue(this);
+        adapter.notifyDataSetChanged();
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
-            case android.R.id.home:
-                navigateUp(this);
-                break;
 
             case R.id.tweet:
                 startActivity(new Intent(this, TweetActivity.class));
@@ -95,48 +99,40 @@ public class UserListActivity extends AppCompatActivity implements Callback<List
         adapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void onFailure(Call<List<User>> call, Throwable t) {
-        createToastMessage(this, "Error retrieving Users");
+        Toast toast = Toast.makeText(this, "Error retrieving users", Toast.LENGTH_LONG);
+        toast.show();
     }
+}
+
+
+class UserAdapter extends ArrayAdapter<User> {
+
+    public List<User> users = new ArrayList<>();
+    private Context context;
+    private MyTweetApp app;
+
+
+    public UserAdapter(Context context, List<User> users) {
+        super(context, R.layout.user_row_list, users);
+        this.context = context;
+        this.users = users;
+    }
+
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    }
+        View view = inflater.inflate(R.layout.user_row_list, parent, false);
+        User user = users.get(position);
+        TextView userName = view.findViewById(R.id.userFullName);
+        userName.setText(user.firstName + " " + user.lastName);
 
+        TextView button = view.findViewById(R.id.followButton);
 
-    class UserAdapter extends ArrayAdapter<User> {
-
-        private MyTweetApp app;
-        private Context context;
-        public List<User> users = new ArrayList<>();
-
-        public UserAdapter(Context context, List<User> users) {
-            super(context, R.layout.user_row_list, users);
-            this.context = context;
-            this.users = users;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            View view = inflater.inflate(R.layout.user_row_list, parent, false);
-            User user = users.get(position);
-
-            TextView userFullName = view.findViewById(R.id.userFullName);
-            userFullName.setText(user.firstName + " " + user.lastName);
-
-            TextView button = view.findViewById(R.id.followButton);
-            if (MyTweetApp.currentUser.following != null) {
-                if (MyTweetApp.currentUser.following.contains(user._id)) {
-                    button.setText("unfollow");
-                } else {
-                    button.setText("follow");
-                }
-            }
-            return view;
-        }
+        return view;
     }
 }

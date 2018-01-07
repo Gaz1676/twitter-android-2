@@ -16,6 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static app.mytweetapp.helpers.MediaPlayerHelper.validInput;
+import static app.mytweetapp.helpers.MediaPlayerHelper.welcome;
 import static app.mytweetapp.helpers.ToastHelper.createToastMessage;
 
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener, Callback<List<User>> {
@@ -34,6 +35,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         signup_button.setOnClickListener(this);
 
         app = (MyTweetApp) getApplication();
+        welcome(this);
     }
 
 
@@ -42,7 +44,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         super.onResume();
         app.currentUser = null;
 
-        Call<List<User>> call = (Call<List<User>>)app.tweetService.getAllUsers();
+        Call<List<User>> call = app.tweetService.getAllUsers();
         call.enqueue(this);
     }
 

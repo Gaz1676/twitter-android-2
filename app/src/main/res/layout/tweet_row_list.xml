@@ -19,19 +19,6 @@
         android:src="@drawable/twitter"
         tools:ignore="HardcodedText" />
 
-
-    <TextView
-        android:id="@+id/tweeter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
-        android:fontFamily="cursive"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
     <TextView
         android:id="@+id/timeline_item_tweet"
         android:layout_width="wrap_content"

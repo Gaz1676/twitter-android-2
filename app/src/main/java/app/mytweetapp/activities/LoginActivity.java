@@ -17,6 +17,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static app.mytweetapp.helpers.MediaPlayerHelper.invalidInput;
+import static app.mytweetapp.helpers.MediaPlayerHelper.validInput;
 import static app.mytweetapp.helpers.ToastHelper.createToastMessage;
 
 
@@ -78,21 +79,24 @@ public class LoginActivity extends AppCompatActivity {
             Call<User> call = app.tweetService.authenticate(user);
             call.enqueue(new Callback<User>() {
 
+
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
-
                     User user = response.body();
 
                     if (app.validUser(user.email, user.password)) {
+                        validInput(getApplication());
                         startActivity (new Intent(LoginActivity.this, TimelineActivity.class));
                         createToastMessage(LoginActivity.this, "You are now logged in " + user.firstName);
                     } else {
+                        invalidInput(getApplication());
                         createToastMessage(LoginActivity.this, "Wrong credentials - just wrong!");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
+                    invalidInput(getApplication());
                     createToastMessage(LoginActivity.this, "Wrong credentials - seeeeeeeeeeriously wrong");
                 }
             });

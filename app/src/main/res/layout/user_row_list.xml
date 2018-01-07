@@ -16,11 +16,17 @@
 
     <Button
         android:id="@+id/followButton"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@drawable/button_color_edges"
+        android:layout_width="wrap_content"
+        android:layout_height="35sp"
         android:text="@string/followButton"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
-        android:focusable="false" />
+        android:focusable="false"
+        android:fontFamily="cursive"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 </RelativeLayout>
